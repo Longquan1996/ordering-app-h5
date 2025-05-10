@@ -2,11 +2,47 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>个人点菜系统</title>
-    <link rel="stylesheet" href="style.css">
+    <title>lulu的专属点菜系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .menu-item {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            display: inline-block;
+            border-radius: 5px;
+            text-align: left;
+            width: 200px;
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h2>🍜 今日菜单</h2>
+    <h2>🍜 lulu专属菜单</h2>
     <div id="menu" class="menu"></div>
 
     <h3>📝 已点菜单</h3>
@@ -17,6 +53,63 @@
     <h3>📅 订单记录</h3>
     <ul id="order-history"></ul>
 
-    <script src="script.js"></script>
+    <script>
+        const menu = [
+            { name: '宫保鸡丁', price: 25, image: 'images/gongbaojiding.png' },
+            { name: '鱼香肉丝', price: 20, image: 'images/gongbaojiding.png' },
+            { name: '麻婆豆腐', price: 18, image: 'images/gongbaojiding.png' },
+            { name: '红烧茄子', price: 15, image: 'images/gongbaojiding.png' }
+        ];
+
+        let order = [];
+
+        function renderMenu(menu) {
+            const menuDiv = document.getElementById("menu");
+            menuDiv.innerHTML = "";
+            menu.forEach(item => {
+                const menuItem = document.createElement("div");
+                menuItem.classList.add("menu-item");
+                menuItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <h4>${item.name}</h4>
+                    <p>价格：${item.price} 元</p>
+                    <button onclick="addToOrder('${item.name}', ${item.price})">点菜</button>
+                `;
+                menuDiv.appendChild(menuItem);
+            });
+        }
+
+        function addToOrder(name, price) {
+            order.push({ name, price });
+            updateOrderList();
+        }
+
+        function updateOrderList() {
+            const list = document.getElementById("order-list");
+            list.innerHTML = "";
+            let total = 0;
+
+            order.forEach(item => {
+                total += item.price;
+                const li = document.createElement("li");
+                li.textContent = `${item.name} - ${item.price} 元`;
+                list.appendChild(li);
+            });
+
+            document.getElementById("total-price").textContent = total;
+        }
+
+        function submitOrder() {
+            if (order.length === 0) {
+                alert("请先点菜！");
+                return;
+            }
+            alert("下单成功！");
+            order = [];
+            updateOrderList();
+        }
+
+        renderMenu(menu);
+    </script>
 </body>
 </html>
